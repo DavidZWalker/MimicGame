@@ -11,6 +11,7 @@ GRAY = (128, 128, 128)
 GAME_MANAGER = GameManager.GameManager((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 DRAWABLES = []
+MOVABLES = []
 
 def run_game():
     #init game engine
@@ -25,6 +26,7 @@ def run_game():
     for cell in GAME_MANAGER.mimic_area.cells:
         DRAWABLES.append(cell)
     DRAWABLES.append(GAME_MANAGER.mimic)
+    MOVABLES.append(GAME_MANAGER.mimic)
 
     # game loop
     while True:
@@ -46,13 +48,9 @@ def run_game():
                 pygame.quit()
                 sys.exit()
 
-        # draw stuff
-        #draw_mimic_area(screen)
-        #draw_mimic(screen, GAME_MANAGER.mimic)
-        mimic = GAME_MANAGER.mimic
-        if (mimic.is_moving):
-            mimic.move()
+        # draw stuff        
         draw(screen)
+        move_movables()
         if frame / fps == 5:
             do_attack()
 
@@ -69,6 +67,11 @@ def draw(screen):
         drawable.border_width
     )
 
+def move_movables():
+    for m in MOVABLES:
+        if m.is_moving:
+            m.move()
+
 def on_arrow_key_pressed(direction):
     # do mimic stuff
     if not GAME_MANAGER.mimic.is_moving:
@@ -78,5 +81,8 @@ def on_arrow_key_pressed(direction):
 
 def do_attack():
     attack_beam = GAME_MANAGER.generate_attack_beam()
+    DRAWABLES.append(attack_beam)
+    MOVABLES.append(attack_beam)
+    attack_beam.start_moving("right")
 
 run_game()

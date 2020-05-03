@@ -28,7 +28,7 @@ class GameManager(object):
         random_cell = self.mimic_area.get_random_cell()
         attack_beam = AttackBeam.AttackBeam(
             attack_beam_width * -1,
-            random_cell.get_relative_center(0, attack_beam_height),
+            random_cell.get_relative_center(0, attack_beam_height)[1],
             attack_beam_width,
             attack_beam_height
         )
