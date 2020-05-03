@@ -1,5 +1,4 @@
-import InteractionArea, MimicArea, Mimic
-import random
+import MimicArea, Mimic
 
 class GameManager(object):
     def __init__(self, game_area):
@@ -9,11 +8,11 @@ class GameManager(object):
         rows = 3
         
         self.mimic_area = MimicArea.MimicArea(
-            (game_area[0]/2)-(width/2), 
-            (game_area[1]/2)-(height/2), 
-            width, 
-            height, 
-            rows, 
+            (game_area[0]/2)-(width/2),
+            (game_area[1]/2)-(height/2),
+            width,
+            height,
+            rows,
             cols
         )
 

@@ -1,5 +1,5 @@
 import sys, pygame
-from pygame.locals import QUIT, MOUSEBUTTONUP, MOUSEBUTTONDOWN
+from pygame.locals import QUIT
 import GameManager
 
 WINDOW_WIDTH = 1080
@@ -64,11 +64,11 @@ def draw_mimic(screen, mimic):
     )
 
 def on_arrow_key_pressed(direction):
-        # do mimic stuff
-        if not GAME_MANAGER.mimic.is_moving:
-            target_cell = GAME_MANAGER.get_neighbor_cell(direction)
-            if target_cell is not None:
-                GAME_MANAGER.mimic.start_moving(target_cell)
+    # do mimic stuff
+    if not GAME_MANAGER.mimic.is_moving:
+        target_cell = GAME_MANAGER.get_neighbor_cell(direction)
+        if target_cell is not None:
+            GAME_MANAGER.mimic.start_moving(target_cell)
 
 def draw_cell_rect(screen, cell, border):
     pygame.draw.rect(
