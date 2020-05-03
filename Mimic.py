@@ -1,8 +1,11 @@
+import math
+
 class Mimic(object):
     def __init__(self, starting_cell):
         self.width = 20
         self.height = 20
-        self.move_speed = 0
+        self.horizontal_velocity = 0
+        self.vertical_velocity = 0
         self.max_speed = 20
         self.is_moving = False
         self.cell = starting_cell
@@ -25,41 +28,67 @@ class Mimic(object):
         relative_center = self.target_cell.get_relative_center(self.width, self.height)
         remaining_x = relative_center[0] - self.pos_x
         remaining_y = relative_center[1] - self.pos_y
-        if remaining_x > 100 or remaining_y > 100:
-            self.__calc_move_speed("up")
-        else: 
-            self.__calc_move_speed("down")
-        if remaining_x > 0:
-            self.pos_x += self.move_speed
-        if remaining_y > 0:
-            self.pos_y += self.move_speed
-        if remaining_x < 0:
-            self.pos_x -= self.move_speed
-        if remaining_y < 0:
-            self.pos_y -= self.move_speed
-        if remaining_x <= 1 and remaining_x >= -1 and remaining_y <= 1 and remaining_y >= -1:
+        dist_delta = abs(math.sqrt(math.pow(remaining_x, 2) + math.pow(remaining_y, 2)))
+        move_dir = self.__get_move_dir(remaining_x, remaining_y)
+        self.__calc_move_speed(move_dir, dist_delta)
+        self.pos_x += self.horizontal_velocity
+        self.pos_y += self.vertical_velocity
+
+        if self.horizontal_velocity == 0 and self.vertical_velocity == 0:
             self.stop_moving()
+        
 
     def stop_moving(self):
         self.is_moving = False
         self.cell = self.target_cell
-        self.move_speed = 0
         self.__center_in_cell()
 
-    def __calc_move_speed(self, direction="up"):
-        if direction == "up":
-            if self.move_speed == 0:
-                self.move_speed = 1
-            elif self.move_speed == 1:
-                self.move_speed = 2
-            else:
-                self.move_speed = min(self.move_speed*self.move_speed, self.max_speed)
-        else:
-            if self.move_speed > 2:
-                self.move_speed /= 2
-            else:
-                self.move_speed = max(self.move_speed-1, 1)
+    def __calc_move_speed(self, move_dir, delta):
+        accelerate = delta >= 30
+        decelerate = delta < 30
 
+        if "right" in move_dir:
+            self.horizontal_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "h")
+        elif "left" in move_dir:
+            self.horizontal_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "h") * -1
+        
+        if "down" in move_dir:
+            self.vertical_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "v")
+        elif "up" in move_dir:
+            self.vertical_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "v") * -1
+
+    def __calc_horizontal_veloctiy(self, accelerate, decelerate, direction):
+        if direction == "h":
+            current_velocity = abs(self.horizontal_velocity)
+        else:
+            current_velocity = abs(self.vertical_velocity)
+            
+        next_velocity = current_velocity
+        if accelerate:
+            next_velocity = min(math.pow(current_velocity, 2), self.max_speed)
+            if next_velocity == current_velocity:
+                next_velocity += 1
+        elif decelerate:
+            if current_velocity < 2:
+                next_velocity = max(current_velocity - 0.5, 0)
+            else:
+                next_velocity = math.sqrt(current_velocity)
+        
+        return next_velocity
+        
+    def __get_move_dir(self, remaining_x, remaining_y):
+        move_dir = ""
+        if remaining_x > 0:
+            move_dir += "right"
+        elif remaining_x < 0:
+            move_dir += "left"
+        
+        if remaining_y > 0:
+            move_dir += "down"
+        elif remaining_y < 0:
+            move_dir += "up"
+        
+        return move_dir
 
     def __center_in_cell(self):
         self.pos_x = self.cell.get_center()[0] - self.width/2

@@ -58,7 +58,6 @@ def draw_mimic(screen, mimic):
         0
     )
 
-
 def draw_interaction_area(screen):
     i_border = GAME_MANAGER.get_interaction_area()
 
