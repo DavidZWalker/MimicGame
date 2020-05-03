@@ -28,11 +28,14 @@ class Mimic(object):
         relative_center = self.target_cell.get_relative_center(self.width, self.height)
         remaining_x = relative_center[0] - self.pos_x
         remaining_y = relative_center[1] - self.pos_y
+        ratio = 1
+        if (abs(remaining_x) > 0 and abs(remaining_y > 0)):
+            ratio = abs(remaining_x / remaining_y)
         dist_delta = abs(math.sqrt(math.pow(remaining_x, 2) + math.pow(remaining_y, 2)))
         move_dir = self.__get_move_dir(remaining_x, remaining_y)
         self.__calc_move_speed(move_dir, dist_delta)
         self.pos_x += self.horizontal_velocity
-        self.pos_y += self.vertical_velocity
+        self.pos_y += self.vertical_velocity * ratio
 
         if self.horizontal_velocity == 0 and self.vertical_velocity == 0:
             self.stop_moving()
@@ -62,7 +65,7 @@ class Mimic(object):
             current_velocity = abs(self.horizontal_velocity)
         else:
             current_velocity = abs(self.vertical_velocity)
-            
+
         next_velocity = current_velocity
         if accelerate:
             next_velocity = min(math.pow(current_velocity, 2), self.max_speed)

@@ -90,7 +90,7 @@ def handle_mouse(screen):
 def on_mouse_up():
     i_area = GAME_MANAGER.get_interaction_area()
 
-    if len(i_area.selected_cells) > 0 and not GAME_MANAGER.mimic.is_moving:
+    if len(i_area.selected_cells) > 0:
         # do mimic stuff
         target_cell = GAME_MANAGER.get_mimic_area_cell_from_interaction_area_cell(
             i_area.selected_cells[-1]
