@@ -1,7 +1,9 @@
 import Cell
+import random
 
 class Area(object):
     def __init__(self, pos_x, pos_y, width, height, cols, rows):
+        self.color = (128, 128, 128)
         self.width = width
         self.height = height
         self.pos_x = pos_x
@@ -62,3 +64,8 @@ class Area(object):
         for cell in self.cells:
             if cell.row == row and cell.column == col:
                 return cell
+
+    def get_random_cell(self):
+        row = random.randint(0, self.rows-1)
+        col = random.randint(0, self.cols-1)
+        return self.__get_cell_at(row, col)

@@ -10,6 +10,8 @@ GRAY = (128, 128, 128)
 
 GAME_MANAGER = GameManager.GameManager((WINDOW_WIDTH, WINDOW_HEIGHT))
 
+DRAWABLES = []
+
 def run_game():
     #init game engine
     pygame.init()
@@ -18,9 +20,15 @@ def run_game():
     screen = pygame.display.set_mode(window_size)
     pygame.display.set_caption("A game")
     clock = pygame.time.Clock()
+    frame = 0
+    fps = 60
+    for cell in GAME_MANAGER.mimic_area.cells:
+        DRAWABLES.append(cell)
+    DRAWABLES.append(GAME_MANAGER.mimic)
 
     # game loop
     while True:
+        frame += 1
         screen.fill((0,0,0))
 
         # terminate on quit-event
@@ -39,28 +47,26 @@ def run_game():
                 sys.exit()
 
         # draw stuff
-        draw_mimic_area(screen)
-        draw_mimic(screen, GAME_MANAGER.mimic)
+        #draw_mimic_area(screen)
+        #draw_mimic(screen, GAME_MANAGER.mimic)
+        mimic = GAME_MANAGER.mimic
+        if (mimic.is_moving):
+            mimic.move()
+        draw(screen)
+        if frame / fps == 5:
+            do_attack()
 
         # update the screen
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(fps)
 
-def draw_mimic_area(screen):
-    mimic_area = GAME_MANAGER.mimic_area
-
-    for cell in mimic_area.cells:
-        draw_cell_rect(screen, cell, 1)
-
-def draw_mimic(screen, mimic):
-    if (mimic.is_moving):
-        mimic.move()
-        
-    pygame.draw.rect(
+def draw(screen):
+    for drawable in DRAWABLES:
+        pygame.draw.rect(
         screen,
-        WHITE,
-        mimic.get_rect(),
-        0
+        drawable.color,
+        drawable.get_rect(),
+        drawable.border_width
     )
 
 def on_arrow_key_pressed(direction):
@@ -70,14 +76,7 @@ def on_arrow_key_pressed(direction):
         if target_cell is not None:
             GAME_MANAGER.mimic.start_moving(target_cell)
 
-def draw_cell_rect(screen, cell, border):
-    pygame.draw.rect(
-                screen,
-                GRAY,
-                cell.get_rect(),
-                border
-            )
-
-
+def do_attack():
+    attack_beam = GAME_MANAGER.generate_attack_beam()
 
 run_game()

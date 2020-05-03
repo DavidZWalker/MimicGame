@@ -2,6 +2,8 @@ import math
 
 class Mimic(object):
     def __init__(self, starting_cell):
+        self.color = (255, 255, 255)
+        self.border_width = 0
         self.width = 20
         self.height = 20
         self.horizontal_velocity = 0
@@ -48,16 +50,16 @@ class Mimic(object):
         decelerate = delta < 30
 
         if "right" in move_dir:
-            self.horizontal_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "h")
+            self.horizontal_velocity = self.__calc_velocity(accelerate, decelerate, "h")
         elif "left" in move_dir:
-            self.horizontal_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "h") * -1
+            self.horizontal_velocity = self.__calc_velocity(accelerate, decelerate, "h") * -1
         
         if "down" in move_dir:
-            self.vertical_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "v")
+            self.vertical_velocity = self.__calc_velocity(accelerate, decelerate, "v")
         elif "up" in move_dir:
-            self.vertical_velocity = self.__calc_horizontal_veloctiy(accelerate, decelerate, "v") * -1
+            self.vertical_velocity = self.__calc_velocity(accelerate, decelerate, "v") * -1
 
-    def __calc_horizontal_veloctiy(self, accelerate, decelerate, direction):
+    def __calc_velocity(self, accelerate, decelerate, direction):
         if direction == "h":
             current_velocity = abs(self.horizontal_velocity)
         else:
@@ -65,7 +67,7 @@ class Mimic(object):
 
         next_velocity = current_velocity
         if accelerate:
-            next_velocity = min(math.pow(current_velocity, 2), self.max_speed)
+            next_velocity = min(math.pow(current_velocity, 3), self.max_speed)
             if next_velocity == current_velocity:
                 next_velocity += 1
         elif decelerate:

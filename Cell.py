@@ -1,5 +1,7 @@
 class Cell(object):
     def __init__(self, pos_x, pos_y, width, height):
+        self.color = (128, 128, 128)
+        self.border_width = 1
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.width = width

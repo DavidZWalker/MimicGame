@@ -1,4 +1,4 @@
-import MimicArea, Mimic
+import MimicArea, Mimic, AttackBeam
 
 class GameManager(object):
     def __init__(self, game_area):
@@ -21,6 +21,19 @@ class GameManager(object):
     def get_neighbor_cell(self, direction):
         current_cell = self.mimic.cell
         return self.mimic_area.find_neighbor_cell(current_cell, direction)
+
+    def generate_attack_beam(self):
+        attack_beam_height = 50
+        attack_beam_width = 700
+        random_cell = self.mimic_area.get_random_cell()
+        attack_beam = AttackBeam.AttackBeam(
+            attack_beam_width * -1,
+            random_cell.get_relative_center(0, attack_beam_height),
+            attack_beam_width,
+            attack_beam_height
+        )
+
+        return attack_beam
 
 
         
