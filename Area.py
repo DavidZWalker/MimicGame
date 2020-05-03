@@ -9,6 +9,8 @@ class Area(object):
         self.border_thickness = 3
         self.cells = self.__add_cells(cols, rows)
         self.selected_cells = []
+        self.rows = rows
+        self.cols = cols
 
     def get_rect(self):
         return [
@@ -26,11 +28,37 @@ class Area(object):
 
         for c in range(cols):
             for r in range(rows):
-                cells.append(Cell.Cell(
+                cell = Cell.Cell(
                     c * col_width + self.pos_x,
                     r * row_height + self.pos_y,
                     col_width,
                     row_height
-                ))
+                )
+                cell.row = r
+                cell.column = c
+                cells.append(cell)
         
         return cells
+
+    def find_neighbor_cell(self, home_cell, direction):
+        if direction == "up":
+            if home_cell.row <= 0:
+                return None
+            return self.__get_cell_at(home_cell.row-1, home_cell.column)
+        if direction == "down":
+            if home_cell.row >= self.rows:
+                return None
+            return self.__get_cell_at(home_cell.row+1, home_cell.column)
+        if direction == "right":
+            if home_cell.column >= self.cols:
+                return None
+            return self.__get_cell_at(home_cell.row, home_cell.column+1)
+        if direction == "left":
+            if home_cell.column <= 0:
+                return None
+            return self.__get_cell_at(home_cell.row, home_cell.column-1)
+    
+    def __get_cell_at(self, row, col):
+        for cell in self.cells:
+            if cell.row == row and cell.column == col:
+                return cell

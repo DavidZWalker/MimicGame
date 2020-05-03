@@ -5,6 +5,8 @@ class Cell(object):
         self.width = width
         self.height = height
         self.is_selected = False
+        self.row = -1
+        self.column = -1
 
     def get_rect(self):
         return [

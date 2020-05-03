@@ -25,24 +25,29 @@ def run_game():
 
         # terminate on quit-event
         for event in pygame.event.get():
-            if event.type == MOUSEBUTTONUP:
-                on_mouse_up()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    on_arrow_key_pressed("left")
+                elif event.key == pygame.K_RIGHT:
+                    on_arrow_key_pressed("right")
+                elif event.key == pygame.K_UP:
+                    on_arrow_key_pressed("up")
+                if event.key == pygame.K_DOWN:
+                    on_arrow_key_pressed("down")
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
         # draw stuff
-        draw_interaction_area(screen)
         draw_mimic_area(screen)
         draw_mimic(screen, GAME_MANAGER.mimic)
-        handle_mouse(screen)
 
         # update the screen
         pygame.display.update()
         clock.tick(60)
 
 def draw_mimic_area(screen):
-    mimic_area = GAME_MANAGER.get_mimic_area()
+    mimic_area = GAME_MANAGER.mimic_area
 
     for cell in mimic_area.cells:
         draw_cell_rect(screen, cell, 1)
@@ -58,47 +63,12 @@ def draw_mimic(screen, mimic):
         0
     )
 
-def draw_interaction_area(screen):
-    i_border = GAME_MANAGER.get_interaction_area()
-
-    for cell in i_border.cells:
-        is_mouse_over = cell.contains_coordinates(pygame.mouse.get_pos())
-        is_mouse_pressed = pygame.mouse.get_pressed()[0]
-        if is_mouse_over or cell.is_selected:
-            draw_cell_rect(screen, cell, 0)
-            if is_mouse_pressed:
-                i_border.select_cell(cell)
-        else:
-            draw_cell_rect(screen, cell, 1)
-
-    # draw border
-    pygame.draw.rect(
-        screen,
-        WHITE,
-        i_border.get_rect(), 
-        i_border.border_thickness
-    )
-
-
-def handle_mouse(screen):
-    mouse_pos = pygame.mouse.get_pos()
-
-    font = pygame.font.SysFont("Arial", 24)
-    font_surface = font.render(str(mouse_pos), True, WHITE)
-    screen.blit(font_surface, (0,0))
-
-def on_mouse_up():
-    i_area = GAME_MANAGER.get_interaction_area()
-
-    if len(i_area.selected_cells) > 0:
+def on_arrow_key_pressed(direction):
         # do mimic stuff
-        target_cell = GAME_MANAGER.get_mimic_area_cell_from_interaction_area_cell(
-            i_area.selected_cells[-1]
-        )
-        GAME_MANAGER.mimic.start_moving(target_cell)
-
-    # reset interaction area
-    i_area.deselect_all_cells()
+        if not GAME_MANAGER.mimic.is_moving:
+            target_cell = GAME_MANAGER.get_neighbor_cell(direction)
+            if target_cell is not None:
+                GAME_MANAGER.mimic.start_moving(target_cell)
 
 def draw_cell_rect(screen, cell, border):
     pygame.draw.rect(
@@ -107,6 +77,7 @@ def draw_cell_rect(screen, cell, border):
                 cell.get_rect(),
                 border
             )
+
 
 
 run_game()
