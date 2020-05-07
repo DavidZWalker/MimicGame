@@ -93,12 +93,13 @@ def draw():
 
 def show_pause_screen():
     overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-    overlay.fill((255, 255, 255))
-    overlay.set_alpha(32)
+    overlay.fill((0, 0, 0))
+    overlay.set_alpha(128)
 
-    paused_text = pygame.font.SysFont('Arial', 30)
-    text = paused_text.render("PAUSED", False, BLACK)
-    overlay.blit(text, (0, 0))
+    paused_text = pygame.font.SysFont('Arial', 84)
+    text = paused_text.render("PAUSED", False, WHITE)
+    text_rect = text.get_rect(center=(WINDOW_WIDTH/2, WINDOW_HEIGHT/2))
+    overlay.blit(text, text_rect)
 
     SCREEN.blit(overlay, (0, 0))
     pygame.display.flip()
