@@ -1,17 +1,17 @@
 import sys, pygame
 from pygame.locals import QUIT
-import GameManager
+import GameManager, Engine
 
 WINDOW_WIDTH = 1080
 WINDOW_HEIGHT = 640
+WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
 
 WHITE = (255, 255, 255)
 GRAY = (128, 128, 128)
 BLACK = (0, 0, 0)
 
-DELTATIME = 0
-
-GAME_MANAGER = GameManager.GameManager((WINDOW_WIDTH, WINDOW_HEIGHT))
+GAME_MANAGER = GameManager.GameManager(WINDOW_SIZE)
+ENGINE = Engine.Engine()
 
 DRAWABLES = []
 MOVABLES = []
@@ -19,44 +19,33 @@ ATTACKS = []
 
 SCREEN = pygame.display.set_mode((0, 0))
 
-def run_game():
+def initialize_game():
     # init game engine and game manager
     pygame.init()
     pygame.font.init()
-    GAME_MANAGER.start()
-    window_size = (WINDOW_WIDTH, WINDOW_HEIGHT)
-    SCREEN = pygame.display.set_mode(window_size)
     pygame.display.set_caption("A game")
-    clock = pygame.time.Clock()
-    fps = 60
+    reset_game()
+
+def reset_game():
+    global GAME_MANAGER
+    global SCREEN
+    GAME_MANAGER = GameManager.GameManager(WINDOW_SIZE)
+    SCREEN = pygame.display.set_mode(WINDOW_SIZE)
+    DRAWABLES.clear()
+    MOVABLES.clear()
+    ATTACKS.clear()
     for cell in GAME_MANAGER.mimic_area.cells:
         DRAWABLES.append(cell)
     DRAWABLES.append(GAME_MANAGER.mimic)
     MOVABLES.append(GAME_MANAGER.mimic)
+    GAME_MANAGER.start()
 
+def run_game_loop():
     # game loop
-    while True:
-        global DELTATIME
+    while GAME_MANAGER.game_active:
         ATTACKS.clear()
-        DELTATIME = clock.tick(fps)
         SCREEN.fill((0, 0, 0))
-
-        # terminate on quit-event
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    on_arrow_key_pressed("left")
-                elif event.key == pygame.K_RIGHT:
-                    on_arrow_key_pressed("right")
-                elif event.key == pygame.K_UP:
-                    on_arrow_key_pressed("up")
-                if event.key == pygame.K_DOWN:
-                    on_arrow_key_pressed("down")
-                if event.key == pygame.K_ESCAPE:
-                    GAME_MANAGER.toggle_pause()
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+        handle_pygame_events()
 
         # draw stuff
         if not GAME_MANAGER.is_game_over and not GAME_MANAGER.is_paused:
@@ -73,6 +62,24 @@ def run_game():
         if not GAME_MANAGER.is_paused and not GAME_MANAGER.is_game_over:
             # update the screen
             pygame.display.update()
+
+def handle_pygame_events():
+    # terminate on quit-event
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                on_arrow_key_pressed("left")
+            elif event.key == pygame.K_RIGHT:
+                on_arrow_key_pressed("right")
+            elif event.key == pygame.K_UP:
+                on_arrow_key_pressed("up")
+            elif event.key == pygame.K_DOWN:
+                on_arrow_key_pressed("down")
+            elif event.key == pygame.K_ESCAPE:
+                GAME_MANAGER.toggle_pause()
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
 
 def draw():
     for attack in ATTACKS:
@@ -118,13 +125,13 @@ def on_arrow_key_pressed(direction):
 
 def do_attack():
     attack_controller = GAME_MANAGER.attack_controller
-    attack_controller.update(DELTATIME)
+    delta_time = ENGINE.get_delta_time()
+    attack_controller.update(delta_time)
     if attack_controller.ms_since_last_attack >= attack_controller.attack_interval:
         attack_controller.attack_cell(GAME_MANAGER.get_cell_for_attack())
     
     for attack in attack_controller.active_attacks:
         ATTACKS.append(attack)
         
-    
-
-run_game()
+initialize_game()
+run_game_loop()

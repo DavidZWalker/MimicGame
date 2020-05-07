@@ -22,6 +22,7 @@ class GameManager(object):
         self.attack_controller = AttackController.AttackController()
         self.is_game_over = False
         self.is_paused = False
+        self.game_active = False
 
     def get_neighbor_cell(self, direction):
         current_cell = self.mimic.cell
@@ -52,6 +53,7 @@ class GameManager(object):
                 self.music_controller.stop_music()
 
     def start(self):
+        self.game_active = True
         self.music_controller.start()
 
     def __pause(self):
