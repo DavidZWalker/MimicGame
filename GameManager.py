@@ -25,10 +25,8 @@ class GameManager(object):
 
     def get_random_cell(self):
         all_cells = self.mimic_area.cells
-        mimic_cell = self.mimic.cell
-        available_cells = list(filter(lambda x: mimic_cell != x, all_cells))
-        cell_nr = random.randint(0, len(available_cells))
-        return available_cells[cell_nr]
+        cell_nr = random.randint(0, len(all_cells)-1)
+        return all_cells[cell_nr]
 
     def get_attack_cell_for_cell(self, cell):
         return AttackCellWrapper.AttackCellWrapper(cell)
