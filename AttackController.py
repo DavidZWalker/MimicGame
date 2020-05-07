@@ -7,6 +7,12 @@ class AttackController(object):
         self.ms_since_last_attack = 0
         self.ms_since_attack_speed_increase = 0
 
+    def get_active_cells(self):
+        active_cells = []
+        for ac in self.active_attacks:
+            active_cells.append(getattr(ac, "cell"))
+        return active_cells
+
     def increase_attack_speed(self):
         self.ms_since_attack_speed_increase = 0
         self.attack_interval = max(250, self.attack_interval-250)

@@ -28,17 +28,21 @@ class GameManager(object):
         return self.mimic_area.find_neighbor_cell(current_cell, direction)
 
     def get_cell_for_attack(self):
-        all_cells = self.mimic_area.cells
+        # only get cells that are not currently under attack
+        available_cells = list(filter(
+            lambda x: x not in self.attack_controller.get_active_cells(),
+            self.mimic_area.cells
+            ))
 
         # the cell with the mimic should have a higher chance of being the attacked cell
         mimic_cell = self.mimic.cell
-        all_cells.append(mimic_cell)
-        all_cells.append(mimic_cell)
-        all_cells.append(mimic_cell)
+        available_cells.append(mimic_cell)
+        available_cells.append(mimic_cell)
+        available_cells.append(mimic_cell)
 
         # choose randomly from the full list
-        cell_nr = random.randint(0, len(all_cells)-1)
-        return all_cells[cell_nr]
+        cell_nr = random.randint(0, len(available_cells)-1)
+        return available_cells[cell_nr]
     
     def check_mimic_collisions(self):
         deadly_attacks = list(filter(lambda x: getattr(x, "is_deadly") == True, self.attack_controller.active_attacks))

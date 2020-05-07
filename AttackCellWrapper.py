@@ -25,7 +25,7 @@ class AttackCellWrapper(object):
         if self.progression < 80:
             self.green_value += amount
             self.blue_value += amount
-        elif self.progression < 87.5:
+        elif self.progression < 95:
             self.green_value = 0
             self.blue_value = 0
         else:
