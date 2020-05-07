@@ -61,12 +61,13 @@ def run_game():
             do_attack()
             move_movables()
             draw()
+            GAME_MANAGER.check_mimic_collisions()
         elif GAME_MANAGER.is_paused:
             pass
         else:
             pass
 
-        if not GAME_MANAGER.is_paused:
+        if not GAME_MANAGER.is_paused and not GAME_MANAGER.is_game_over:
             # update the screen
             pygame.display.update()
 

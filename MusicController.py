@@ -21,3 +21,7 @@ class MusicController(object):
             mixer.music.load(self.bg_music_paused_file)
             mixer.music.play(-1, current_music_pos)
             self.active_music_file = self.bg_music_paused_file
+
+    def stop_music(self):
+        mixer.music.stop()
+        self.active_music_file = ""

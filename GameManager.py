@@ -31,6 +31,13 @@ class GameManager(object):
         all_cells = self.mimic_area.cells
         cell_nr = random.randint(0, len(all_cells)-1)
         return all_cells[cell_nr]
+    
+    def check_mimic_collisions(self):
+        deadly_attacks = list(filter(lambda x: getattr(x, "is_deadly") == True, self.attack_controller.active_attacks))
+        for attack in deadly_attacks:
+            if self.mimic.cell.get_rect() == attack.get_rect():
+                self.is_game_over = True
+                self.music_controller.stop_music()
 
     def start(self):
         self.music_controller.start()
