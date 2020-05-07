@@ -7,6 +7,7 @@ WINDOW_HEIGHT = 640
 
 WHITE = (255, 255, 255)
 GRAY = (128, 128, 128)
+BLACK = (0, 0, 0)
 
 DELTATIME = 0
 
@@ -36,6 +37,7 @@ def run_game():
     # game loop
     while True:
         global DELTATIME
+        ATTACKS.clear()
         DELTATIME = clock.tick(fps)
         SCREEN.fill((0,0,0))
 
@@ -63,6 +65,7 @@ def run_game():
             draw()
             GAME_MANAGER.check_mimic_collisions()
         elif GAME_MANAGER.is_paused:
+            draw()
             show_pause_screen()
         else:
             pass
@@ -72,6 +75,14 @@ def run_game():
             pygame.display.update()
 
 def draw():
+    for attack in ATTACKS:
+        pygame.draw.rect(
+            SCREEN,
+            attack.add_color(5),
+            attack.get_rect(),
+            0
+        )
+
     for drawable in DRAWABLES:
         pygame.draw.rect(
         SCREEN,
@@ -82,13 +93,14 @@ def draw():
 
 def show_pause_screen():
     overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-    overlay.fill((0, 0, 0))
+    overlay.fill((255, 255, 255))
+    overlay.set_alpha(32)
 
     paused_text = pygame.font.SysFont('Arial', 30)
-    text = paused_text.render("PAUSED", False, WHITE)
+    text = paused_text.render("PAUSED", False, BLACK)
     overlay.blit(text, (0, 0))
 
-    SCREEN.blit(text, (0, 0))
+    SCREEN.blit(overlay, (0, 0))
     pygame.display.flip()
 
 def move_movables():
@@ -110,11 +122,8 @@ def do_attack():
         attack_controller.attack_cell(GAME_MANAGER.get_cell_for_attack())
     
     for attack in attack_controller.active_attacks:
-        pygame.draw.rect(
-            SCREEN,
-            attack.add_color(5),
-            attack.get_rect(),
-            0
-        )
+        ATTACKS.append(attack)
+        
+    
 
 run_game()

@@ -9,6 +9,7 @@ class AttackCellWrapper(object):
         self.progression = 0.0
         self.attack_complete = False
         self.is_deadly = False
+        self.color = (self.red_value, self.green_value, self.blue_value)
 
     def get_rect(self):
         return [
