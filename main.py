@@ -8,20 +8,24 @@ WINDOW_HEIGHT = 640
 WHITE = (255, 255, 255)
 GRAY = (128, 128, 128)
 
+DELTATIME = 0
+
 GAME_MANAGER = GameManager.GameManager((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 DRAWABLES = []
 MOVABLES = []
+ATTACKS = []
+
+SCREEN = pygame.display.set_mode((0, 0))
 
 def run_game():
     #init game engine
     pygame.init()
     pygame.font.init()
     window_size = (WINDOW_WIDTH, WINDOW_HEIGHT)
-    screen = pygame.display.set_mode(window_size)
+    SCREEN = pygame.display.set_mode(window_size)
     pygame.display.set_caption("A game")
     clock = pygame.time.Clock()
-    frame = 0
     fps = 60
     for cell in GAME_MANAGER.mimic_area.cells:
         DRAWABLES.append(cell)
@@ -30,8 +34,9 @@ def run_game():
 
     # game loop
     while True:
-        frame += 1
-        screen.fill((0,0,0))
+        global DELTATIME
+        DELTATIME = clock.tick(fps)
+        SCREEN.fill((0,0,0))
 
         # terminate on quit-event
         for event in pygame.event.get():
@@ -49,19 +54,17 @@ def run_game():
                 sys.exit()
 
         # draw stuff        
-        draw(screen)
+        draw()
         move_movables()
-        if frame / fps == 5:
-            do_attack()
+        do_attack()
 
         # update the screen
         pygame.display.update()
-        clock.tick(fps)
 
-def draw(screen):
+def draw():
     for drawable in DRAWABLES:
         pygame.draw.rect(
-        screen,
+        SCREEN,
         drawable.color,
         drawable.get_rect(),
         drawable.border_width
@@ -79,10 +82,25 @@ def on_arrow_key_pressed(direction):
         if target_cell is not None:
             GAME_MANAGER.mimic.start_moving(target_cell)
 
+attack_interval = 5000
+ms_since_last_attack = 0
+active_attacks = []
+
 def do_attack():
-    attack_beam = GAME_MANAGER.generate_attack_beam()
-    DRAWABLES.append(attack_beam)
-    MOVABLES.append(attack_beam)
-    attack_beam.start_moving("right")
+    global ms_since_last_attack
+    ms_since_last_attack += DELTATIME
+    if ms_since_last_attack >= attack_interval:
+        ms_since_last_attack = 0
+        random_cell = GAME_MANAGER.get_random_cell()
+        active_attacks.append(GAME_MANAGER.get_attack_cell_for_cell(random_cell))
+    
+    for attack in active_attacks:
+        pygame.draw.rect(
+            SCREEN,
+            attack.add_color(),
+            attack.get_rect(),
+            0
+        )
+        
 
 run_game()
