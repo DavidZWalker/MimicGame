@@ -96,7 +96,7 @@ def do_attack():
     attack_controller = GAME_MANAGER.attack_controller
     attack_controller.update(DELTATIME)
     if attack_controller.ms_since_last_attack >= attack_controller.attack_interval:
-        attack_controller.attack_cell(GAME_MANAGER.get_random_cell())
+        attack_controller.attack_cell(GAME_MANAGER.get_cell_for_attack())
     
     for attack in attack_controller.active_attacks:
         pygame.draw.rect(

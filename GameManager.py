@@ -27,8 +27,16 @@ class GameManager(object):
         current_cell = self.mimic.cell
         return self.mimic_area.find_neighbor_cell(current_cell, direction)
 
-    def get_random_cell(self):
+    def get_cell_for_attack(self):
         all_cells = self.mimic_area.cells
+
+        # the cell with the mimic should have a higher chance of being the attacked cell
+        mimic_cell = self.mimic.cell
+        all_cells.append(mimic_cell)
+        all_cells.append(mimic_cell)
+        all_cells.append(mimic_cell)
+
+        # choose randomly from the full list
         cell_nr = random.randint(0, len(all_cells)-1)
         return all_cells[cell_nr]
     
