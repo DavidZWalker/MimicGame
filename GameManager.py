@@ -1,4 +1,4 @@
-import MimicArea, Mimic, AttackCellWrapper
+import MimicArea, Mimic, AttackCellWrapper, AttackController
 import random
 
 class GameManager(object):
@@ -18,6 +18,7 @@ class GameManager(object):
         )
 
         self.mimic = Mimic.Mimic(self.mimic_area.cells[0])
+        self.attack_controller = AttackController.AttackController()
 
     def get_neighbor_cell(self, direction):
         current_cell = self.mimic.cell

@@ -56,10 +56,9 @@ def run_game():
                 sys.exit()
 
         # draw stuff
-        move_movables()
         do_attack()
+        move_movables()
         draw()
-        increase_attack_speed_loop()
 
         # update the screen
         pygame.display.update()
@@ -85,37 +84,18 @@ def on_arrow_key_pressed(direction):
         if target_cell is not None:
             GAME_MANAGER.mimic.start_moving(target_cell)
 
-attack_interval = 2000
-ms_since_last_attack = 0
-active_attacks = []
-
 def do_attack():
-    global active_attacks
-    global attack_interval
-    global ms_since_last_attack
-    active_attacks = list(filter(lambda x: getattr(x, "attack_complete") == False, active_attacks))
-    ms_since_last_attack += DELTATIME
-    if ms_since_last_attack >= attack_interval:
-        ms_since_last_attack = 0
-        random_cell = GAME_MANAGER.get_random_cell()
-        active_attacks.append(GAME_MANAGER.get_attack_cell_for_cell(random_cell))
+    attack_controller = GAME_MANAGER.attack_controller
+    attack_controller.update(DELTATIME)
+    if attack_controller.ms_since_last_attack >= attack_controller.attack_interval:
+        attack_controller.attack_cell(GAME_MANAGER.get_random_cell())
     
-    for attack in active_attacks:
+    for attack in attack_controller.active_attacks:
         pygame.draw.rect(
             SCREEN,
             attack.add_color(5),
             attack.get_rect(),
             0
         )
-
-ms_since_attack_speed_increase = 0
-
-def increase_attack_speed_loop():
-    global ms_since_attack_speed_increase
-    global attack_interval
-    ms_since_attack_speed_increase += DELTATIME
-    if ms_since_attack_speed_increase > 3000:
-        ms_since_attack_speed_increase = 0
-        attack_interval = max(250, attack_interval-250)
 
 run_game()

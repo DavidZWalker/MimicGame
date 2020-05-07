@@ -8,6 +8,7 @@ class AttackCellWrapper(object):
         self.blue_value = 0
         self.progression = 0.0
         self.attack_complete = False
+        self.is_deadly = False
 
     def get_rect(self):
         return [
@@ -26,9 +27,11 @@ class AttackCellWrapper(object):
         else:
             self.green_value = 0
             self.blue_value = 0
+            self.is_deadly = True
 
         if (self.progression >= 100):
             self.attack_complete = True
+            self.is_deadly = False
 
         return (
             min(self.red_value, 255),
