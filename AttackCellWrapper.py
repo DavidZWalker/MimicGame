@@ -21,12 +21,13 @@ class AttackCellWrapper(object):
     def add_color(self, amount):
         self.progression += (amount / 255) * 100
         self.red_value += amount
-        if (self.progression < 85):
+        if self.progression < 80:
             self.green_value += amount
             self.blue_value += amount
-        else:
+        elif self.progression < 87.5:
             self.green_value = 0
             self.blue_value = 0
+        else:
             self.is_deadly = True
 
         if (self.progression >= 100):
