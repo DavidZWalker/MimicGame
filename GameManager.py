@@ -59,7 +59,8 @@ class GameManager(object):
         self.music_controller.start()
 
     def toggle_pause(self):
-        if self.is_paused:
-            self.__resume()
-        else:
-            self.__pause()
+        if not self.is_game_over:
+            if self.is_paused:
+                self.__resume()
+            else:
+                self.__pause()

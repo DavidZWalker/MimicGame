@@ -63,7 +63,7 @@ def run_game():
             draw()
             GAME_MANAGER.check_mimic_collisions()
         elif GAME_MANAGER.is_paused:
-            pass
+            show_pause_screen()
         else:
             pass
 
@@ -79,6 +79,17 @@ def draw():
         drawable.get_rect(),
         drawable.border_width
     )
+
+def show_pause_screen():
+    overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+    overlay.fill((0, 0, 0))
+
+    paused_text = pygame.font.SysFont('Arial', 30)
+    text = paused_text.render("PAUSED", False, WHITE)
+    overlay.blit(text, (0, 0))
+
+    SCREEN.blit(text, (0, 0))
+    pygame.display.flip()
 
 def move_movables():
     for m in MOVABLES:
