@@ -20,7 +20,7 @@ ATTACKS = []
 SCREEN = pygame.display.set_mode((0, 0))
 
 def run_game():
-    #init game engine
+    # init game engine and game manager
     pygame.init()
     pygame.font.init()
     GAME_MANAGER.start()
