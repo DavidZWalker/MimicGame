@@ -39,7 +39,7 @@ def run_game():
         global DELTATIME
         ATTACKS.clear()
         DELTATIME = clock.tick(fps)
-        SCREEN.fill((0,0,0))
+        SCREEN.fill((0, 0, 0))
 
         # terminate on quit-event
         for event in pygame.event.get():
@@ -78,7 +78,7 @@ def draw():
     for attack in ATTACKS:
         pygame.draw.rect(
             SCREEN,
-            attack.add_color(5),
+            attack.add_color(),
             attack.get_rect(),
             0
         )

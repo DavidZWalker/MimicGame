@@ -10,6 +10,7 @@ class AttackCellWrapper(object):
         self.attack_complete = False
         self.is_deadly = False
         self.color = (self.red_value, self.green_value, self.blue_value)
+        self.progression_step = 2
 
     def get_rect(self):
         return [
@@ -19,13 +20,13 @@ class AttackCellWrapper(object):
             self.cell.height
         ]
 
-    def add_color(self, amount):
-        self.progression += (amount / 255) * 100
-        self.red_value += amount
-        if self.progression < 80:
-            self.green_value += amount
-            self.blue_value += amount
-        elif self.progression < 95:
+    def add_color(self):
+        self.progression += self.progression_step
+        self.red_value = (self.progression/100) * 255
+        if self.progression < 75:
+            self.green_value = (self.progression/100) * 255
+            self.blue_value = (self.progression/100) * 255
+        elif self.progression < 90:
             self.green_value = 0
             self.blue_value = 0
         else:
