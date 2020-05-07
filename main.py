@@ -22,6 +22,7 @@ def run_game():
     #init game engine
     pygame.init()
     pygame.font.init()
+    GAME_MANAGER.start()
     window_size = (WINDOW_WIDTH, WINDOW_HEIGHT)
     SCREEN = pygame.display.set_mode(window_size)
     pygame.display.set_caption("A game")
@@ -31,8 +32,6 @@ def run_game():
         DRAWABLES.append(cell)
     DRAWABLES.append(GAME_MANAGER.mimic)
     MOVABLES.append(GAME_MANAGER.mimic)
-    pygame.mixer.music.load('bg_music.mp3')
-    pygame.mixer.music.play(-1)
 
     # game loop
     while True:
@@ -51,17 +50,25 @@ def run_game():
                     on_arrow_key_pressed("up")
                 if event.key == pygame.K_DOWN:
                     on_arrow_key_pressed("down")
+                if event.key == pygame.K_ESCAPE:
+                    GAME_MANAGER.toggle_pause()
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
         # draw stuff
-        do_attack()
-        move_movables()
-        draw()
+        if not GAME_MANAGER.is_game_over and not GAME_MANAGER.is_paused:
+            do_attack()
+            move_movables()
+            draw()
+        elif GAME_MANAGER.is_paused:
+            pass
+        else:
+            pass
 
-        # update the screen
-        pygame.display.update()
+        if not GAME_MANAGER.is_paused:
+            # update the screen
+            pygame.display.update()
 
 def draw():
     for drawable in DRAWABLES:

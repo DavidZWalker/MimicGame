@@ -1,4 +1,4 @@
-import MimicArea, Mimic, AttackCellWrapper, AttackController
+import MimicArea, Mimic, AttackController, MusicController
 import random
 
 class GameManager(object):
@@ -17,8 +17,11 @@ class GameManager(object):
             cols
         )
 
+        self.music_controller = MusicController.MusicController()
         self.mimic = Mimic.Mimic(self.mimic_area.cells[0])
         self.attack_controller = AttackController.AttackController()
+        self.is_game_over = False
+        self.is_paused = False
 
     def get_neighbor_cell(self, direction):
         current_cell = self.mimic.cell
@@ -29,5 +32,19 @@ class GameManager(object):
         cell_nr = random.randint(0, len(all_cells)-1)
         return all_cells[cell_nr]
 
-    def get_attack_cell_for_cell(self, cell):
-        return AttackCellWrapper.AttackCellWrapper(cell)
+    def start(self):
+        self.music_controller.start()
+
+    def __pause(self):
+        self.is_paused = True
+        self.music_controller.pause()
+
+    def __resume(self):
+        self.is_paused = False
+        self.music_controller.start()
+
+    def toggle_pause(self):
+        if self.is_paused:
+            self.__resume()
+        else:
+            self.__pause()

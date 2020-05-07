@@ -1,0 +1,77 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="bg_music_paused_data" version="1.3.0" audacityversion="2.3.2" sel0="0.0000000000" sel1="29.8018594104" vpos="0" h="0.0000000000" zoom="26.0766342753" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="Software" value="Lavf56.19.100"/>
+		<tag name="major_brand" value="mp42"/>
+		<tag name="TITLE" value="Arcade Game Menu Music Loop (8Bit Style)"/>
+		<tag name="minor_version" value="0"/>
+		<tag name="compatible_brands" value="isommp42"/>
+	</tags>
+	<wavetrack name="Arcade Game Menu Music Loop (8Bit Style)" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="131530">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808eae.au" len="131530" min="-0.44816" max="0.459808" rms="0.124694"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="2.98253968" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1182704">
+				<waveblock start="0">
+					<simpleblockfile filename="e080866b.au" len="196379" min="-0.480633" max="0.497505" rms="0.123357"/>
+				</waveblock>
+				<waveblock start="196379">
+					<simpleblockfile filename="e0808c00.au" len="196379" min="-0.470912" max="0.464787" rms="0.122923"/>
+				</waveblock>
+				<waveblock start="392758">
+					<simpleblockfile filename="e0808f09.au" len="262144" min="-0.465835" max="0.468464" rms="0.121282"/>
+				</waveblock>
+				<waveblock start="654902">
+					<simpleblockfile filename="e080840d.au" len="262144" min="-0.465265" max="0.497191" rms="0.127722"/>
+				</waveblock>
+				<waveblock start="917046">
+					<simpleblockfile filename="e0808644.au" len="262144" min="-0.490597" max="0.503995" rms="0.123303"/>
+				</waveblock>
+				<waveblock start="1179190">
+					<simpleblockfile filename="e08080fb.au" len="3514" min="-0.076311" max="0.072426" rms="0.027708"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Arcade Game Menu Music Loop (8Bit Style)" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="131530">
+				<waveblock start="0">
+					<simpleblockfile filename="e080854d.au" len="131530" min="-0.492996" max="0.456112" rms="0.124809"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="2.98253968" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1182704">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808947.au" len="196379" min="-0.486117" max="0.47268" rms="0.124996"/>
+				</waveblock>
+				<waveblock start="196379">
+					<simpleblockfile filename="e080878a.au" len="196379" min="-0.467662" max="0.451764" rms="0.121207"/>
+				</waveblock>
+				<waveblock start="392758">
+					<simpleblockfile filename="e0808f34.au" len="262144" min="-0.498623" max="0.496261" rms="0.126405"/>
+				</waveblock>
+				<waveblock start="654902">
+					<simpleblockfile filename="e08085c8.au" len="262144" min="-0.507968" max="0.519326" rms="0.133584"/>
+				</waveblock>
+				<waveblock start="917046">
+					<simpleblockfile filename="e080828f.au" len="262144" min="-0.48435" max="0.513977" rms="0.119293"/>
+				</waveblock>
+				<waveblock start="1179190">
+					<simpleblockfile filename="e080870e.au" len="3514" min="-0.069036" max="0.07562" rms="0.02901"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
