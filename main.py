@@ -31,6 +31,8 @@ def run_game():
         DRAWABLES.append(cell)
     DRAWABLES.append(GAME_MANAGER.mimic)
     MOVABLES.append(GAME_MANAGER.mimic)
+    pygame.mixer.music.load('bg_music.mp3')
+    pygame.mixer.music.play(-1)
 
     # game loop
     while True:
