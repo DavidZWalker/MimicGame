@@ -1,6 +1,6 @@
 import sys, pygame
 from pygame.locals import QUIT
-import GameManager, Engine
+import GameManager, Engine, MainMenu
 
 WINDOW_WIDTH = 1080
 WINDOW_HEIGHT = 640
@@ -10,6 +10,7 @@ WHITE = (255, 255, 255)
 GRAY = (128, 128, 128)
 BLACK = (0, 0, 0)
 
+MAIN_MENU = MainMenu.MainMenu(WINDOW_SIZE)
 GAME_MANAGER = GameManager.GameManager(WINDOW_SIZE)
 ENGINE = Engine.Engine()
 
@@ -21,16 +22,17 @@ SCREEN = pygame.display.set_mode((0, 0))
 
 def initialize_game():
     # init game engine and game manager
+    global SCREEN
     pygame.init()
     pygame.font.init()
     pygame.display.set_caption("A game")
-    reset_game()
+    SCREEN = pygame.display.set_mode(WINDOW_SIZE)
+    show_main_menu()
 
-def reset_game():
+def start_game():
     global GAME_MANAGER
     global SCREEN
     GAME_MANAGER = GameManager.GameManager(WINDOW_SIZE)
-    SCREEN = pygame.display.set_mode(WINDOW_SIZE)
     DRAWABLES.clear()
     MOVABLES.clear()
     ATTACKS.clear()
@@ -39,6 +41,7 @@ def reset_game():
     DRAWABLES.append(GAME_MANAGER.mimic)
     MOVABLES.append(GAME_MANAGER.mimic)
     GAME_MANAGER.start()
+    run_game_loop()
 
 def run_game_loop():
     # game loop
@@ -57,14 +60,13 @@ def run_game_loop():
             draw()
             show_pause_screen()
         else:
-            pass
+            show_main_menu()
 
         if not GAME_MANAGER.is_paused and not GAME_MANAGER.is_game_over:
             # update the screen
             pygame.display.update()
 
 def handle_pygame_events():
-    # terminate on quit-event
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
@@ -77,6 +79,14 @@ def handle_pygame_events():
                 on_arrow_key_pressed("down")
             elif event.key == pygame.K_ESCAPE:
                 GAME_MANAGER.toggle_pause()
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+def handle_menu_events():
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            menu_mouse_down()
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
@@ -109,7 +119,7 @@ def show_pause_screen():
     overlay.blit(text, text_rect)
 
     SCREEN.blit(overlay, (0, 0))
-    pygame.display.flip()
+    pygame.display.update()
 
 def move_movables():
     for m in MOVABLES:
@@ -132,6 +142,40 @@ def do_attack():
     
     for attack in attack_controller.active_attacks:
         ATTACKS.append(attack)
+
+def show_main_menu():
+    start_button = MAIN_MENU.start_button
+    start_button_font = pygame.font.SysFont('Arial', 42)
+    title_font = pygame.font.SysFont("Arial", 84)
+    title = title_font.render("Game", False, WHITE)
+    title_rect = title.get_rect(center=(WINDOW_WIDTH/2, 100))
+    MAIN_MENU.is_open = True
         
+    while MAIN_MENU.is_open:
+        handle_menu_events()
+
+        # mouse over effects
+        mouse_pos = pygame.mouse.get_pos()
+        if start_button.is_inside(mouse_pos):
+            start_button.border_width = 0
+            start_button.text_color = BLACK
+        else:
+            start_button.border_width = 2
+            start_button.text_color = WHITE
+
+        text = start_button_font.render(start_button.text, False, start_button.text_color)
+        text_rect = text.get_rect(center=(start_button.pos[0]+start_button.width/2, start_button.pos[1]+start_button.height/2))
+
+        pygame.draw.rect(SCREEN, start_button.color, start_button.get_rect(), start_button.border_width)
+        SCREEN.blit(text, text_rect)
+        SCREEN.blit(title, title_rect)
+        pygame.display.update()
+
+def menu_mouse_down():
+    mouse_pos = pygame.mouse.get_pos()
+    start_button = MAIN_MENU.start_button
+    if start_button.is_inside(mouse_pos):
+        MAIN_MENU.is_open = False
+        start_game()
+      
 initialize_game()
-run_game_loop()
