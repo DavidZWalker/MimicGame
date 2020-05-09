@@ -56,11 +56,12 @@ def run_game_loop():
             move_movables()
             draw()
             GAME_MANAGER.check_mimic_collisions()
+            update_points()
         elif GAME_MANAGER.is_paused:
             draw()
             show_pause_screen()
         else:
-            show_main_menu()
+            show_main_menu(GAME_MANAGER.points)
 
         if not GAME_MANAGER.is_paused and not GAME_MANAGER.is_game_over:
             # update the screen
@@ -82,6 +83,12 @@ def handle_pygame_events():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+
+def update_points():
+    points_text = pygame.font.SysFont('Arial', 36)
+    text = points_text.render(str(GAME_MANAGER.points), False, WHITE)
+    text_rect = text.get_rect(center=(100,100))
+    SCREEN.blit(text, text_rect)
 
 def handle_menu_events():
     for event in pygame.event.get():
@@ -143,11 +150,13 @@ def do_attack():
     for attack in attack_controller.active_attacks:
         ATTACKS.append(attack)
 
-def show_main_menu():
+def show_main_menu(points=-1):
     start_button = MAIN_MENU.start_button
+    if points >= 0:
+        start_button.text = "Retry"
     start_button_font = pygame.font.SysFont('Arial', 42)
     title_font = pygame.font.SysFont("Arial", 84)
-    title = title_font.render("Game", False, WHITE)
+    title = title_font.render(MAIN_MENU.title_text, True, WHITE)
     title_rect = title.get_rect(center=(WINDOW_WIDTH/2, 100))
     MAIN_MENU.is_open = True
         
@@ -163,8 +172,17 @@ def show_main_menu():
             start_button.border_width = 2
             start_button.text_color = WHITE
 
-        text = start_button_font.render(start_button.text, False, start_button.text_color)
+        text = start_button_font.render(start_button.text, True, start_button.text_color)
         text_rect = text.get_rect(center=(start_button.pos[0]+start_button.width/2, start_button.pos[1]+start_button.height/2))
+
+        # show points
+        if (points >= 0):
+            MAIN_MENU.title_text = "Game Over"
+            points_font = pygame.font.SysFont("Arial", 48)
+            points_string = str(points)
+            points_text = points_font.render("You achieved {p} points".format(p=points_string), True, WHITE)
+            points_rect = points_text.get_rect(center=(MAIN_MENU.start_button.pos[0]+MAIN_MENU.start_button.width/2, WINDOW_HEIGHT-200))
+            SCREEN.blit(points_text, points_rect)
 
         pygame.draw.rect(SCREEN, start_button.color, start_button.get_rect(), start_button.border_width)
         SCREEN.blit(text, text_rect)

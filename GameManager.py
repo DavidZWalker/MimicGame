@@ -23,6 +23,7 @@ class GameManager(object):
         self.is_game_over = False
         self.is_paused = False
         self.game_active = False
+        self.points = 0
 
     def get_neighbor_cell(self, direction):
         current_cell = self.mimic.cell
@@ -51,6 +52,11 @@ class GameManager(object):
             if self.mimic.cell.get_rect() == attack.get_rect():
                 self.is_game_over = True
                 self.music_controller.stop_music()
+            else:
+                self.add_points(10)
+
+    def add_points(self, amount):
+        self.points += amount
 
     def start(self):
         self.game_active = True

@@ -7,3 +7,4 @@ class MainMenu(object):
         self.start_button.set_location(width/2-self.start_button.width/2, 300)
         self.start_button.set_text("Start")
         self.is_open = True
+        self.title_text = "Main Menu"
